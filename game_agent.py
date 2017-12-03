@@ -209,11 +209,84 @@ class MinimaxPlayer(IsolationPlayer):
                 each helper function or else your agent will timeout during
                 testing.
         """
+
+        # Like on the Graphic View it represents the down triangle (min_val)
+        def min_val(game, depth):
+            # (note 2)
+            if self.time_left() < self.TIMER_THRESHOLD:
+                raise SearchTimeout()
+
+            # if "root depth" just return it score
+            if depth == 0:
+                return self.score(game, self)
+
+            # get the legal moves (empty & on range spaces) from isolation.Board
+            legal_moves = game.get_legal_moves()
+            # positive "infinity" float to start comparing which is the lowest (anything will be less than that)
+            main_score = float('inf')
+
+            # for each move, test it game forecast_move & eval it max in 1 depth level
+            # (it is recursive, so this call return to it method in next depth)
+            for each_move in legal_moves:
+                game_subbranch = game.forecast_move(each_move)
+                score = max_val(game_subbranch, depth - 1)
+                # as min_val, if main is greater than the score, so update vars
+                if score < main_score:
+                    best_move = each_move
+                    main_score = score
+
+            return main_score
+
+        # Like on the Graphic View it represents the up triangle (max_val)
+        def max_val(game, depth):
+            # (note 2)
+            if self.time_left() < self.TIMER_THRESHOLD:
+                raise SearchTimeout()
+
+            # if "root depth" just return it score
+            if depth == 0:
+                return self.score(game, self)
+
+            # get the legal moves (empty & on range spaces) from isolation.Board
+            legal_moves = game.get_legal_moves()
+            # negative "infinity" float to start comparing which is the highest (anything will be greater than that)
+            main_score = float('-inf')
+
+            # for each move, test it game forecast_move & eval it min in 1 depth level
+            # (it is recursive, so this call return to it method in next depth)
+            for each_move in legal_moves:
+                game_subbranch = game.forecast_move(each_move)
+                score = min_val(game_subbranch, depth - 1)
+                # as max_val, if main is greater than the score, so update vars
+                if score > main_score:
+                    best_move = each_move
+                    main_score = score
+
+            return main_score
+
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        # init variables
+        best_move = (-1, -1)
+        main_score = float('-inf')
+        legal_moves = game.get_legal_moves()
+
+        # if there are legal_moves, so use any random move on it as first best_move
+        if legal_moves:
+            best_move = legal_moves[random.randint(0, len(legal_moves) - 1)]
+
+        # Eval min-max for each move in legal_moves
+        for each_move in legal_moves:
+            # it is the same base of max_val, but when min_val is called it starts a recursive loop
+            # it is working like a "propagation" for nodes levels above
+            game_subbranch = game.forecast_move(each_move)
+            score = min_val(game_subbranch, depth - 1)
+            if score > main_score:
+                best_move = each_move
+                main_score = score
+
+        return best_move
 
 
 class AlphaBetaPlayer(IsolationPlayer):

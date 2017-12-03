@@ -99,3 +99,11 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# IDE
+.idea
+
+# Udacity
+.udacity-pa
+isolation-*.zip
+isolation-*.json
