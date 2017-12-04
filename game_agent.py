@@ -338,7 +338,7 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         try:
             # The try/except block will automatically catch the exception
-            # raised when the timer is about to expire.
+            # raised when the timer is about to expire (before forfeit)
             while True:
                 best_move = self.alphabeta(game, depth)
                 depth += 1 # goes deeper
@@ -394,5 +394,80 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        # Calculate the heuristic value of a game state from the point of player (custom_score_3)
+        def score(self, game, player):
+            return custom_score_3(game, player)
+
+        # min alpha beta helper
+        # implement the proposed function in AIMA, page 170
+        def min_alpha_beta(game, depth, alpha, beta):
+            if self.time_left() < self.TIMER_THRESHOLD:
+                raise SearchTimeout()
+
+            # init values
+            main_score = float('inf')
+            legal_moves = game.get_legal_moves(game.active_player)
+
+            # if "root depth" it current score is the min
+            if depth == 0 or len(legal_moves) == 0:
+                return self.score(game, self)
+
+            # calculate beta for each move,
+            # if main score is less or equals alpha, so it returns that main score
+            for each_move in legal_moves:
+                game_subbranch = game.forecast_move(each_move)
+                score = max_alpha_beta(game_subbranch, alpha, beta, depth - 1)
+                main_score = min(main_score, score)
+
+                if main_score <= alpha:
+                    return main_score
+
+                beta = min(beta, main_score)
+
+            return main_score
+
+        # max alpha beta helper
+        def max_alpha_beta(game, alpha, beta, depth):
+            if self.time_left() < self.TIMER_THRESHOLD:
+                raise SearchTimeout()
+
+            # init values
+            main_score = float('-inf')
+            legal_moves = game.get_legal_moves()
+
+            # if "root depth" it current score is the max
+            if depth == 0 or len(legal_moves) == 0:
+                return self.score(game, self)
+
+            # calculate alpha for each move,
+            # if main score is greater or equals beta, so it returns that main score
+            for each_move in legal_moves:
+                game_subbranch = game.forecast_move(each_move)
+                score = min_alpha_beta(game_subbranch, depth - 1, alpha, beta)
+                main_score = max(main_score, score)
+
+                if main_score >= beta:
+                    return main_score
+
+                alpha = max(alpha, main_score)
+
+            return main_score
+
+        # init variables
+        best_move = (-1, -1)
+        init_best_move = best_move
+        main_score = float('-inf')
+        legal_moves = game.get_legal_moves()
+        player_legal_moves = game.get_legal_moves(game.active_player)
+
+        try:
+            best_move = legal_moves[0]
+        except IndexError:
+            return init_best_move
+        for idx, move in enumerate(player_legal_moves):
+            v = min_alpha_beta(game.forecast_move(move), alpha, beta, depth-1)
+            if v > main_score:
+                alpha = v
+                main_score = v
+                best_move = move
+        return best_move
