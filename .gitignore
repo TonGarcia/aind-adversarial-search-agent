@@ -104,6 +104,6 @@ ENV/
 .idea
 
 # Udacity
-.udacity-pa
 isolation-*.zip
 isolation-*.json
+*.zip
