@@ -123,6 +123,7 @@ class Score:
         if game.is_winner(player):
             return float('inf')
 
+        # Euclidean Distance (appointment)
         w, h = game.width / 2., game.height / 2.
         y, x = game.get_player_location(player)
         return float((h - y) ** 2 + (w - x) ** 2)
@@ -330,7 +331,7 @@ class MinimaxPlayer(IsolationPlayer):
             # it is the same base of max_val, but when min_val is called it starts a recursive loop
             # it is working like a "propagation" for nodes levels above
             game_subbranch = game.forecast_move(each_move)
-            score = min_val(game_subbranch, depth - 1)
+            score = max_val(game_subbranch, depth - 1)
             if score > main_score:
                 best_move = each_move
                 main_score = score
@@ -454,7 +455,7 @@ class AlphaBetaPlayer(IsolationPlayer):
         except IndexError:
             return init_best_move
         for idx, move in enumerate(player_legal_moves):
-            v = self.min_alpha_beta(game.forecast_move(move), alpha, beta, depth-1)
+            v = self.max_alpha_beta(game.forecast_move(move), alpha, beta, depth-1)
             if v > main_score:
                 alpha = v
                 main_score = v
