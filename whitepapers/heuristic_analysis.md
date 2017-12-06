@@ -1,3 +1,8 @@
+Author: Ilton Garcia dos Santos Silveira
+<br>
+Date: December, 06, 2017        
+
+
 # Choosing a Heuristic to an Isolation Game-Playing Agent
 
 That analysis should expose the comparison of the the different heuristics & my reasoning for choosing the the heuristic I ultimately use in mine submitted agent.
