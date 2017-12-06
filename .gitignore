@@ -107,3 +107,7 @@ ENV/
 isolation-*.zip
 isolation-*.json
 *.zip
+
+# Latex
+*.aux
+*.out
