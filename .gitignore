@@ -111,3 +111,5 @@ isolation-*.json
 # Latex
 *.aux
 *.out
+*.bbl
+*.blg

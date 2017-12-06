@@ -461,9 +461,9 @@ class AlphaBetaPlayer(IsolationPlayer):
                 best_move = move
         return best_move
 
-    # Calculate the heuristic value of a game state from the point of player (custom_score_3)
+    # Calculate the heuristic value of a game state from the point of player (my winner score algorithm)
     def score(self, game, player):
-        return custom_score_3(game, player)
+        return custom_score_2(game, player)
 
     # Return True if the game is over for the active player, false otherwise
     # Also perform the Cutoff-test described in AIMA, ps 173
