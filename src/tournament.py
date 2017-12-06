@@ -91,7 +91,10 @@ def play_matches(cpu_agents, test_agents, num_matches):
         wins = {key: 0 for (key, value) in test_agents}
         wins[agent.player] = 0
 
-        print("{!s:^9}{:^13}".format(idx + 1, agent.name), end="", flush=True)
+        end = ""
+        flush = True
+
+        print("{!s:^9}{:^13}".format(idx + 1, agent.name), end, flush)
 
         counts = play_round(agent, test_agents, wins, num_matches)
         total_timeouts += counts[0]

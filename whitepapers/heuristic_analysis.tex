@@ -1,0 +1,122 @@
+\documentclass[a4paper]{article}
+\usepackage[sort]{natbib}
+\usepackage{fancyhdr}
+
+
+% \documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
+\usepackage{booktabs} % To thicken table lines
+\usepackage{tablefootnote}
+\usepackage{listings}
+% \usepackage[numbers]{natbib}
+
+\usepackage{graphicx}
+\usepackage{babel,blindtext}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+
+
+
+
+
+% you may include other packages here (next line)
+\usepackage{enumitem}
+
+
+
+%----- you must not change this -----------------
+\oddsidemargin 0.2cm
+\topmargin -1.0cm
+\textheight 24.0cm
+\textwidth 15.25cm
+% \parindent=0pt
+\parskip 1ex
+\renewcommand{\baselinestretch}{1.1}
+\pagestyle{fancy}
+%----------------------------------------------------
+
+
+
+% enter your details here----------------------------------
+
+\lhead{\normalsize \textrm{Isolation Udacity - Build a Game-Playing Agent - Heuristic Analysis}}
+\chead{}
+\rhead{\normalsize December 6, 2017}
+\lfoot{\normalsize \textrm{AIND - Udacity}}
+\cfoot{}
+\rfoot{Ilton Garcia dos Santos Silveira}
+\setlength{\fboxrule}{4pt}\setlength{\fboxsep}{2ex}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+\begin{document}
+
+
+%----------------your title below -----------------------------
+
+\begin{center}
+
+{\bf \large Choosing a Heuristic to an Isolation Game-Playing Agent \\ \small Ilton Garcia dos Santos Silveira}
+\end{center}
+
+
+%---------------- start of document body------------------
+
+The role of games in artificial intelligence is intriguing. In an article published by \cite{Economist2017}, the author argued that there are several reasons for this connection. For example, many researchers use games as training grounds for real world problems. Others, observing that different games require different cognitive skills, think games can help them understand how the problem of intelligence may be broken down into smaller, more manageable chunks. Others still, building on these two observations, think games can help them develop a proper theory of artificial intelligence.
+
+In this project, we also engaged in the game-playing domain. I implemented an adversarial search agent to play a game called "Isolation". As stated by \cite{Udacity2017}, Isolation is a deterministic, two-player game of perfect information in which the players alternate turns moving a single piece from one cell to another on a board. Whenever either player occupies a cell, that cell becomes blocked for the remainder of the game. The first player with no remaining legal moves loses, and the opponent is declared the winner.
+
+To solve this game, I have implemented two strategies: minimax algorithm and alpha-beta pruning. As explained by \cite{russelartificial}, the first one performs a complete depth-first exploration of the game tree and its time cost in real games can be impractical. The second one, alpha-beta pruning, ignores a portion of the search tree that makes no difference to the final choice. According to \cite{russelartificial}, when this technique is applied to standard minimax tree, it returns the same move as minimax would.
+
+However, alpha-beta still has to search all the way to terminal states for at least a portion of the search space. To cut off the search earlier and allow the agent makes decisions in a reasonable amount of time, I implemented three different versions of a heuristic evaluation function, inspired in the \textit{improved\_score} and \textit{open\_move\_score} evolution functions, already implemented by Udacity. Evaluation functions estimate the expected utility of the game from a given position and are applied to states in the search,  turning non-terminal nodes into terminal leaves.
+
+% Udacity: At least three evaluation functions are implemented and analyzed.
+
+The first function implemented, called \textit{custom\_score3}, rewards the agent simply by the number of legal moves still available, as the \textit{open\_move\_score} function, and also gives an additional reward to the agent if it is in the center of the board. The idea is to motivate the agent to dominate the center when it is possible.
+
+The second function implemented, \textit{custom\_score2}, is a weighted linear function, where is given to the opponent's moves two times more relevance than the agent's moves. The motivation of this approach is to influence the agent to prioritize moves that minimize the moves from the opponent before maximize its moves.
+
+Finally, the \textit{custom\_score} uses the same approach that the last function, giving more emphasis to the opponents' moves. However, like the first function, this one also gives an additional reward when the agent moves to the center of the board. Thus, this function motivates the agent to minimize the moves from the opponent and also to dominate the center of the board.
+
+% strongly correlated wirh the actual chances of winning
+
+% Udacity: A brief report lists (using a table and any appropriate visualizations) and verbally describes the performance of agents using the implemented evaluation functions. Performance data includes results from tournament.py comparing (at a minimum) the best performing student heuristic against the ID_Improved agent.
+
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{l|cccc}
+{agent / heuristic} &    AB\_Improved &    AB\_Custom &    AB\_Custom\_2 &    AB\_Custom\_3 \\
+\midrule
+Random &  95\% &  100\% &  90\% &    90\% \\
+MM\_Open &  75\% &  80\% &  65\% &  60\% \\
+MM\_Center &  75\% &  90\% &  90\% &  75\% \\
+MM\_Improved &    70\% &  65\% &  75\% &  80\% \\
+AB\_Open &    45\% &  60\% &  60\% &  50\% \\
+AB\_Center &    50\% &  65\% &  50\% &  40\% \\
+AB\_Improved &    40\% &  45\% &  55\% &  45\% \\
+
+\end{tabular}
+\caption{\label{tab:results}Output example from \textit{tournament.py} }
+\end{table}
+
+
+To test these functions, I performed ten tests with ten matches each, using \textit{tournament.py}. The table \ref{tab:results} presents an example of the result from a tournament. Then, I compared the performance of the agent using each heuristic created to the performance of an agent using the heuristic \textit{improved\_score} . To do so, I used a one-sided Welch's unequal variances t-test\footnote{Source: \url{https://goo.gl/Je2ZLP}} for the null hypothesis that the agent using custom heuristic has the expected win rate greater than the performance of an agent using the benchmark heuristic. As the implementation of the t-test in the Scipy\footnote{Source: \url{https://goo.gl/gs222c}} assumes a two-sided t-test, to perform the one-sided test, we have to divide the p-value by $2$ to compare to a critical value of $0.05$ and require that the t-value be greater than zero.
+
+
+% Udacity: The report makes a recommendation about which evaluation function should be used and justifies the recommendation with at least three reasons supported by the data.
+
+There was not a significant difference between the performances of the agent using the custom heuristics. The best one was the performance of the \textit{AB\_Custom} (t-value $\approx 0.97$;  p-value $< 0.173$). Even though this agent was able to beat the benchmark in $7$ of the $10$ tests performed, its performance was not significantly superior to the agent \textit{AB\_Improved}, as suggested by the hypothesis test.
+
+The agent \textit{AB\_Custom\_2} performed worst (t-value $\approx 0.29$;  p-value $< 0.386$), beating the benchmark in $5$ of the $10$ tests performed and \textit{AB\_Custom\_3} was significantly worst than the agent \textit{AB\_Improved} (t-value $\approx -3.04$;  p-value $< 0.004$).
+
+Based on these results, I recommend to use the function \textit{custom\_score}. Even though the agent that have used this function was not able to play much better than the \textit{AB\_Improved}, it still won 70\% of the tournaments.
