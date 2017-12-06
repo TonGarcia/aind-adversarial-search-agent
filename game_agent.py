@@ -34,9 +34,16 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
-    raise NotImplementedError
+    if game.is_loser(player):
+        return float('-inf')
 
+    if game.is_winner(player):
+        return float('inf')
+
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    center_score = (Score.center(game, player) == 0) * 10.
+    return float(own_moves - 2. * opp_moves + center_score)
 
 def custom_score_2(game, player):
     """Calculate the heuristic value of a game state from the point of view
@@ -60,8 +67,15 @@ def custom_score_2(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
-    raise NotImplementedError
+    if game.is_loser(player):
+        return float('-inf')
+
+    if game.is_winner(player):
+        return float('inf')
+
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return float(own_moves - 2*opp_moves)
 
 
 def custom_score_3(game, player):
@@ -451,12 +465,9 @@ class AlphaBetaPlayer(IsolationPlayer):
     def score(self, game, player):
         return custom_score_3(game, player)
 
+    # Return True if the game is over for the active player, false otherwise
+    # Also perform the Cutoff-test described in AIMA, ps 173
     def cutoff_test(self, game, depth):
-        '''
-        Return True if the game is over for the active player
-        and False otherwise. Also perform the Cutoff-test described in
-        AIMA, ps 173
-        '''
         # check if there is still time left
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
