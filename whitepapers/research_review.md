@@ -17,4 +17,15 @@ This paper introduced many AI training perspectives:
 1. Reinforcement Learning, the system played against different versions of itself, learning from its mistakes;
 1. Finally the evaluation function was created using Reinforcement Learning using self-play data set.
 
-As result, it program defeated 99.8% of others Go programs and even defeated the human European Go champion.
+AlphaGo trained a 13-layer policy network, from 30 million positions from the KGS Go Server. The network predicted 
+expert moves on a held out test set with an accuracy of 57.0% using all input features, and 55.7% using only raw board 
+position and move history as inputs, compared to the state-of-the-art from other research groups of 44.4% at date of 
+submission24, giving 2% of error average to improve the performance. Small improvements in accuracy led to large
+improvements in playing strength; larger networks achieve better accuracy but are slower to evaluate during search. This
+was why AlphaGo trained a faster but less accurate rollout policy pπ(a|s), using a linear softmax of small pattern 
+features with weights π; this achieved an accuracy of 24.2%, using just 2μs to select an action, rather than 
+3ms for the policy network, now giving 20.2% of accuracy to be 15.000 times faster.
+
+As final result, it program defeated 99.8% of others Go programs and even defeated the human European Go champion, so it
+proves that sometimes we don't need the most accurate system, we can give away of some accuracy & it can be better than
+human & using the available time instead spend so much more time than we can wait for a "simple" prediction.

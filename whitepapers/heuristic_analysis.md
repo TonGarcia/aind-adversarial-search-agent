@@ -38,3 +38,6 @@ As a Result I got:
 | WIN RATE    |    72.0%    |   67.0%   |    74.0%    |    67.0%    |
 
 So, by this result I choose my AB_Custom_2 as the winner strategy because it won 74.0%, the best WIN RATE.
+As the __custom_score__ a mix of strategy 2 & strategy 3 I expected that it would be the better answer. But it proved that using this approach is better only against a Random & MM Agents, against AB Agents it mix become vulnerable. Another conclusion is that the mix between 2 and 3 performed exactly the same as the strategy 3 on WIN RATE perspective, which means that the mix brought no "globally" improvements for AB3 & down the AB2 perform.
+
+According to the video "16 Solving 5x5 Isolation", Malcolm Haines explained how he got better results moving by the edges instead of using the center (my strategy for score_3), and considering the edges he could explore the advantage that the edges looks & work as mirrors each other, reducing the search effort. But the most important is that moving away from the center & paying attention on opponent's moves, reflecting it, the better way is to take a decision based on the situation (opponents reactions), not following a fixed strategy, which can be reflected.   
